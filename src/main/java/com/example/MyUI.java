@@ -3,6 +3,7 @@ package com.example;
 import javax.servlet.annotation.WebServlet;
 
 import com.example.view.logged.MainPage;
+import com.example.view.unlogged.CreateNewAccount;
 import com.example.view.unlogged.LoginPage;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.VaadinServletConfiguration;
@@ -19,18 +20,21 @@ import sun.applet.Main;
 @Theme("mytheme")
 @Widgetset("com.example.MyAppWidgetset")
 public class MyUI extends UI {
-
+    public String PAGE_NAME = "my";
     @Override
     protected void init(VaadinRequest vaadinRequest) {
         new Navigator(this,this);
-        getNavigator().addView(LoginPage.PAGE_NAME, LoginPage.class);
         getNavigator().addView(MainPage.PAGE_NAME, MainPage.class);
-        getNavigator().navigateTo(LoginPage.PAGE_NAME);
+        getNavigator().addView(LoginPage.PAGE_NAME, LoginPage.class);
+        getNavigator().addView(CreateNewAccount.PAGE_NAME, CreateNewAccount.class);
+        getNavigator().addView(MainPage.PAGE_NAME,MainPage.class);
 
-        if(getSession().getAttribute("username")!=null){
+        if(getSession().getAttribute("userName")!=null){
             getNavigator().navigateTo(MainPage.PAGE_NAME);
-            System.out.println(getSession().getAttribute("username"));
+        }else{
+            getNavigator().navigateTo(LoginPage.PAGE_NAME);
         }
+
     }
 
     @WebServlet(urlPatterns = "/*", name = "MyUIServlet", asyncSupported = true)
