@@ -4,12 +4,24 @@ package com.example.Domain;
  * Created by Maciek on 2015-03-17.
  */
 public class Person {
+    int id;
     String name = "";
     String userName = "";
     String lastName = "";
     String password = "";
 
-    public Person(String name, String userName, String lastName, String password) {
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public Person(int id, String name, String userName, String lastName, String password) {
+
+        this.id = id;
         this.name = name;
         this.userName = userName;
         this.lastName = lastName;

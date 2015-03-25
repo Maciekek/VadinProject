@@ -67,6 +67,8 @@ public class LoginPage extends CustomComponent implements View,Button.ClickListe
             if(p.getName().equals(username.getValue())){
                 if(passwordIsCorrect(p.getPassword(), passwordField.getValue())){
                     VaadinSession.getCurrent().setAttribute("userName", username.getValue());
+                    VaadinSession.getCurrent().setAttribute("userId", PersonManager.getUserIdByUserName(username.getValue()));
+                    System.out.println("USERID: " + PersonManager.getUserIdByUserName(username.getValue()));
                     System.out.println(getSession().getAttribute("userName"));
 
                     getUI().getNavigator().navigateTo(MainPage.PAGE_NAME);

@@ -1,8 +1,12 @@
 package com.example.view.logged;
 
+import com.example.Domain.Person;
 import com.example.Domain.Task;
+import com.example.Service.TasksService;
 import com.example.view.unlogged.LoginPage;
+import com.sun.jmx.snmp.tasks.TaskServer;
 import com.vaadin.data.util.BeanItemContainer;
+import com.vaadin.event.ItemClickEvent;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.server.VaadinSession;
@@ -15,35 +19,84 @@ import com.vaadin.ui.themes.Reindeer;
  */
 public class MainPage extends CustomComponent implements View, Button.ClickListener{
     public static final String PAGE_NAME = "MainPage";
-
-    private Task task = new Task("asd","qwe");
+    private TasksService tasksService = new TasksService();
     private BeanItemContainer<Task> tasks = new BeanItemContainer<Task>(Task.class);
-
+    private final Table table = new Table("Tasks", tasks);
     public MainPage(){
+        int userId = (int) VaadinSession.getCurrent().getAttribute("userId");
         Button loginButton = new Button("Logout", this);
         VerticalLayout fields = new VerticalLayout(loginButton);
         fields.setCaption("Welcome on Main Page: " + VaadinSession.getCurrent().getAttribute("userName"));
-        System.out.println(VaadinSession.getCurrent().getAttribute("userName"));
 
         fields.setSpacing(true);
         fields.setMargin(new MarginInfo(true, true, true, false));
         fields.setSizeUndefined();
 
-
-        final Table table = new Table("Tasks", tasks);
         table.setSizeFull();
         table.setColumnHeader("name", "Name");
         table.setColumnHeader("description", "Description");
         table.setSelectable(true);
         table.setImmediate(true);
-        table.addItem(task);
+        table.setContainerDataSource(tasks);
+        tasks.addAll(TasksService.getTasks(userId));
+
+
+        table.addGeneratedColumn("Delete", new Table.ColumnGenerator() {
+            @Override
+            public Object generateCell(final Table table, final Object o, final Object o1) {
+                Button button = new Button("Delete");
+                button.addClickListener(new Button.ClickListener() {
+                    @Override
+                    public void buttonClick(Button.ClickEvent clickEvent) {
+                        Task task1 = (Task) o;
+                        table.getContainerDataSource().removeItem(o);
+                        TasksService.removeTask(task1.getId());
+                    }
+                });
+                return button;
+            }
+
+        });
+        table.addGeneratedColumn("Edit", new Table.ColumnGenerator() {
+            @Override
+            public Object generateCell(final Table table, final Object o, Object o1) {
+                Button button = new Button("Edit");
+
+                button.addStyleName("Frienldy");
+                button.addClickListener(new Button.ClickListener() {
+                    @Override
+                    public void buttonClick(Button.ClickEvent clickEvent) {
+                        table.getContainerDataSource().removeItem(o);
+                    }
+                });
+                return button;
+            }
+
+        });
+
+
+
+        table.addItemClickListener(new ItemClickEvent.ItemClickListener() {
+            @Override
+            public void itemClick(ItemClickEvent itemClickEvent) {
+
+            }
+        });
+        table.addItemClickListener(new ItemClickEvent.ItemClickListener() {
+            @Override
+            public void itemClick(ItemClickEvent itemClickEvent) {
+                Object rowId = table.getValue();
+                System.out.println(table.getContainerProperty(rowId, "name"));
+                System.out.println(itemClickEvent.getItemId());
+            }
+        });
 
 
         Button addTask = new Button("Add task");
         addTask.addClickListener(new Button.ClickListener() {
             @Override
             public void buttonClick(Button.ClickEvent clickEvent) {
-                
+                getUI().getNavigator().navigateTo(AddTask.PAGE_NAME);
 
             }
         });
@@ -60,7 +113,7 @@ public class MainPage extends CustomComponent implements View, Button.ClickListe
 
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent viewChangeEvent) {
-
+        tasks.addAll(tasksService.getTasks((int) VaadinSession.getCurrent().getAttribute("userId")));
     }
 
     @Override

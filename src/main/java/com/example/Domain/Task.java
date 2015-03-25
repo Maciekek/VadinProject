@@ -4,6 +4,8 @@ package com.example.Domain;
  * Created by Maciek on 2015-03-22.
  */
 public class Task {
+    public int id;
+    public int ownerId;
     public String name;
     public String description;
 
@@ -23,12 +25,30 @@ public class Task {
         this.description = description;
     }
 
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getOwnerId() {
+        return ownerId;
+    }
+
+    public void setOwnerId(int ownerId) {
+        this.ownerId = ownerId;
+    }
+
     public Task() {
 
     }
 
-    public Task(String name, String description) {
 
+    public int getId() {
+        return id;
+    }
+
+    public Task(int id, int ownerId, String name, String description) {
+        this.id = id;
+        this.ownerId = ownerId;
         this.name = name;
         this.description = description;
     }
