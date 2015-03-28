@@ -8,6 +8,24 @@ public class Task {
     public int ownerId;
     public String name;
     public String description;
+    public String fileName;
+
+    public String getFileName() {
+        return fileName;
+    }
+
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
+    }
+
+    public Task(int id, int ownerId, String name, String description, String fileName) {
+
+        this.id = id;
+        this.ownerId = ownerId;
+        this.name = name;
+        this.description = description;
+        this.fileName = fileName;
+    }
 
     public String getName() {
         return name;

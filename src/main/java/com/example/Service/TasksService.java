@@ -4,6 +4,7 @@ import com.example.Domain.Task;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by Maciek on 2015-03-22.
@@ -29,6 +30,7 @@ public class TasksService {
         for(Task task : tasks){
 
             System.out.println();
+
             if(userId == task.getOwnerId()){
                 myTasks.add(task);
             }
@@ -45,5 +47,12 @@ public class TasksService {
             }
 
         }
+    }
+
+    public static void deleteTasks(Object[] tasksToRemove) {
+        for(Object task : tasksToRemove){
+            tasks.remove((Task) task);
+        }
+
     }
 }

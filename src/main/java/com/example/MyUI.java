@@ -2,8 +2,10 @@ package com.example;
 
 import javax.servlet.annotation.WebServlet;
 
+import com.example.Service.PersonManager;
 import com.example.view.logged.AddTask;
 import com.example.view.logged.MainPage;
+import com.example.view.logged.ShowTask;
 import com.example.view.unlogged.CreateNewAccount;
 import com.example.view.unlogged.LoginPage;
 import com.vaadin.annotations.Theme;
@@ -24,18 +26,22 @@ public class MyUI extends UI {
     public String PAGE_NAME = "my";
     @Override
     protected void init(VaadinRequest vaadinRequest) {
+
         new Navigator(this,this);
         getNavigator().addView(MainPage.PAGE_NAME, MainPage.class);
         getNavigator().addView(LoginPage.PAGE_NAME, LoginPage.class);
         getNavigator().addView(CreateNewAccount.PAGE_NAME, CreateNewAccount.class);
         getNavigator().addView(MainPage.PAGE_NAME,MainPage.class);
         getNavigator().addView(AddTask.PAGE_NAME, AddTask.class);
+        getNavigator().addView(ShowTask.PAGE_NAME, ShowTask.class);
 
         if(getSession().getAttribute("userName")!=null){
             getNavigator().navigateTo(MainPage.PAGE_NAME);
         }else{
             getNavigator().navigateTo(LoginPage.PAGE_NAME);
         }
+
+
 
     }
 
