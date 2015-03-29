@@ -41,30 +41,33 @@ public class MainPage extends CustomComponent implements View, Button.ClickListe
 
         grid = new Grid(tasks);
         grid.setWidth("500px");
+        grid.removeColumn("id");
+        grid.removeColumn("fileName");
+        grid.removeColumn("ownerId");
+        grid.setColumnOrder("name", "description");
 
-
-
-        grid.setSelectionMode(Grid.SelectionMode.MULTI);
-
-        TextField nameEditor = new TextField();
         grid.setEditorEnabled(true);
 
         grid.setCellStyleGenerator(new Grid.CellStyleGenerator() {
             public String getStyle(com.vaadin.ui.Grid.CellReference cellReference) {
                 return cellReference.getPropertyId().equals("fileName") ? "imagecol" : null;}
         });
-//        grid.getColumn("name").setEditorField(nameEditor);
+
 
         Button deleteSelected = new Button("Delete Selected", e -> {
-            // Delete all selected data items
             for (Object itemId: grid.getSelectedRows())
                 grid.getContainerDataSource().removeItem(itemId);
-
-            // Disable after deleting
+            TasksService.deleteTasks(grid.getSelectedRow());
             e.getButton().setEnabled(false);
             Notification.show(grid.getSelectedRows().size() + " removed.", Notification.Type.TRAY_NOTIFICATION);
         });
         deleteSelected.setEnabled(false);
+        Button showSelected = new Button("Show Selected", e -> {
+            VaadinSession.getCurrent().setAttribute("obj", grid.getSelectedRow());
+            getUI().getNavigator().navigateTo(ShowTask.PAGE_NAME);
+            e.getButton().setEnabled(false);
+        });
+        showSelected.setEnabled(false);
 
 //        grid.addItemClickListener(new ItemClickEvent.ItemClickListener() {
 //            @Override
@@ -76,25 +79,17 @@ public class MainPage extends CustomComponent implements View, Button.ClickListe
 
         grid.addSelectionListener(selection -> {
             deleteSelected.setEnabled(true);
-
-            TasksService.deleteTasks(selection.getSelected().toArray());
-            System.out.println(selection.getSelected().toString());
-
+            showSelected.setEnabled(true);
         });
 
         Button addTask = new Button("Add task");
-        addTask.addClickListener(new Button.ClickListener() {
-            @Override
-            public void buttonClick(Button.ClickEvent clickEvent) {
-                getUI().getNavigator().navigateTo(AddTask.PAGE_NAME);
-
-            }
-        });
+        addTask.addClickListener(clickEvent -> getUI().getNavigator().navigateTo(AddTask.PAGE_NAME));
 
         fields.addComponent(grid);
         HorizontalLayout horizontalLayout = new HorizontalLayout();
         horizontalLayout.addComponent(addTask);
         horizontalLayout.addComponent(deleteSelected);
+        horizontalLayout.addComponent(showSelected);
         horizontalLayout.setSpacing(true);
         fields.addComponent(horizontalLayout);
         fields.addComponent(loginButton);

@@ -19,14 +19,15 @@ public class TasksService {
 
     public static void addTask(Task task){
         System.out.println("DOdaje taks: " + task);
-        System.out.println(tasks);
+        System.out.println("ADDTASK 01: " + tasks);
         tasks.add(task);
-        System.out.println(tasks);
+        System.out.println("ADDTASK 02: " + tasks);
     }
 
     public static List<Task> getTasks(int userId) {
         System.out.println("USERID: " + userId);
         List<Task> myTasks = new ArrayList<Task>();
+        System.out.println("TASK SIZE 01: " + tasks.size());
         for(Task task : tasks){
 
             System.out.println();
@@ -38,21 +39,7 @@ public class TasksService {
         return myTasks;
     }
 
-    public static void removeTask(int id){
-        System.out.println("Szukam taska");
-        for(Task task : tasks){
-            if(task.getId() == id){
-                System.out.println("Task o id:  " + id + " został usunięty...");
-                tasks.remove(task);
-            }
-
-        }
-    }
-
-    public static void deleteTasks(Object[] tasksToRemove) {
-        for(Object task : tasksToRemove){
-            tasks.remove((Task) task);
-        }
-
+    public static void deleteTasks(Object tasksToRemove) {
+            tasks.remove((Task) tasksToRemove);
     }
 }

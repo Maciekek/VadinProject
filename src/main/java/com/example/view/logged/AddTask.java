@@ -54,7 +54,7 @@ public class AddTask extends CustomComponent implements View {
                 getUI().getNavigator().navigateTo(MainPage.PAGE_NAME);
             }
         });
-        VerticalLayout fields = new VerticalLayout(taskName, taskDescription,createTask,upload);
+        VerticalLayout fields = new VerticalLayout(taskName, taskDescription,upload,createTask);
         fields.addComponent(image);
         image.setHeight("300px");
         image.setWidth("300px");

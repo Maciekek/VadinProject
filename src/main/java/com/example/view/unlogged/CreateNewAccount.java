@@ -79,7 +79,7 @@ public class CreateNewAccount extends CustomComponent implements View {
 
             private boolean accountIsExsisting(FieldGroup binder) {
                 for (Person p : personManager.getPersons()) {
-                    if (p.getName().equals(binder.getField("name").getValue())) {
+                    if (p.getUserName().equals(binder.getField("userName").getValue())) {
                         return true;
                     }
                 }

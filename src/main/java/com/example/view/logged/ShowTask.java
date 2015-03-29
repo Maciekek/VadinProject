@@ -36,22 +36,24 @@ public class ShowTask extends CustomComponent implements View {
         taskName.setEnabled(false);
         Image image = new Image(null,
                 new ThemeResource("img/" + task.getFileName()));
+        image.setWidth("300px");
+        image.setHeight("300px");
 
-        image.setSizeUndefined();
-
-        Panel panel = new Panel("Image");
-
-        panel.setContent(image);
+//        image.setSizeUndefined();
+//
+//        Panel panel = new Panel("Image");
+//        panel.setWidth("400px");
+//        panel.setHeight("400px");
+//        panel.setContent(image);
 
 
         Button saveChanges = new Button("Save");
         saveChanges.setVisible(false);
-        saveChanges.addClickListener(new Button.ClickListener() {
-            @Override
-            public void buttonClick(Button.ClickEvent clickEvent) {
-                task.setName(taskName.getValue());
-                task.setDescription(taskName.getValue());
-            }
+        saveChanges.addClickListener(clickEvent -> {
+            task.setName(taskName.getValue());
+            task.setDescription(taskDesc.getValue());
+            System.out.println("EDIT SAVE");
+            getUI().getNavigator().navigateTo(MainPage.PAGE_NAME);
         });
 
         Button updateTask = new Button("Let`s update task");
@@ -64,7 +66,7 @@ public class ShowTask extends CustomComponent implements View {
             }
         });
 
-        VerticalLayout fields = new VerticalLayout(taskName,taskDesc,panel,saveChanges,updateTask);
+        VerticalLayout fields = new VerticalLayout(taskName,taskDesc,image,saveChanges,updateTask);
 
 
         fields.setCaption("Your task");
